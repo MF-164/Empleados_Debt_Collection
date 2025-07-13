@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Debt_Collection_API", "Debt_Collection_API\Debt_Collection_API.csproj", "{65CAD44B-C657-401F-8592-C0F1242CA92E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3BB1DD1E-0452-49BC-98FD-129062709742} = {3BB1DD1E-0452-49BC-98FD-129062709742}
+		{E2CE348B-AA8B-4697-94DC-66912ABBE451} = {E2CE348B-AA8B-4697-94DC-66912ABBE451}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Debt_Collection_CORE", "Debt_Collction_CORE\Debt_Collection_CORE.csproj", "{3BB1DD1E-0452-49BC-98FD-129062709742}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E2CE348B-AA8B-4697-94DC-66912ABBE451} = {E2CE348B-AA8B-4697-94DC-66912ABBE451}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Debt_Collection_DATA", "Debt_Collection_DATA\Debt_Collection_DATA.csproj", "{E2CE348B-AA8B-4697-94DC-66912ABBE451}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65CAD44B-C657-401F-8592-C0F1242CA92E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65CAD44B-C657-401F-8592-C0F1242CA92E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65CAD44B-C657-401F-8592-C0F1242CA92E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65CAD44B-C657-401F-8592-C0F1242CA92E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BB1DD1E-0452-49BC-98FD-129062709742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BB1DD1E-0452-49BC-98FD-129062709742}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BB1DD1E-0452-49BC-98FD-129062709742}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BB1DD1E-0452-49BC-98FD-129062709742}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2CE348B-AA8B-4697-94DC-66912ABBE451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2CE348B-AA8B-4697-94DC-66912ABBE451}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2CE348B-AA8B-4697-94DC-66912ABBE451}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2CE348B-AA8B-4697-94DC-66912ABBE451}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
