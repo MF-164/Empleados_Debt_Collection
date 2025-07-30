@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Debt_Collection_CORE.ViewModels;
+using Debt_Collection_DATA.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Debt_Collection_DATA.Models
+namespace Debt_Collection_CORE.ViewModels
 {
-    public class Client
+    public class ClientVM
     {
         public int Id { get; set; } // Unique identifier for the client
         public string? Name { get; set; }
@@ -21,10 +23,8 @@ namespace Debt_Collection_DATA.Models
         public decimal? AgentRate { get; set; }
 
 
-        public int? AgentId { get; set; }
-        public Agent? Agent { get; set; }
+        public int? AgentName { get; set; }
 
-        public ICollection<Site>? Sites { get; set; }
+        public ICollection<SiteForClientVM>? Sites { get; set; }
     }
-
 }

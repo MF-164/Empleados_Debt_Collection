@@ -21,11 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\Debt_Collction_CORE\Debt_Collection_CORE.csproj" />
+	  <Folder Include="Controllers\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Debt_Collection_DATA\Debt_Collection_DATA.csproj" />
+	  <ProjectReference Include="..\Debt_Collection_DATA\Debt_Collection_DATA.csproj" />
   </ItemGroup>
 
 </Project>

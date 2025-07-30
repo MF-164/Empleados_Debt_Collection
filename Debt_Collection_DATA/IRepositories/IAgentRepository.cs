@@ -7,17 +7,18 @@ using System.Threading.Tasks;
 
 namespace Debt_Collection_DATA.IRepositories
 {
+    // CRUD operations for Agent entity
     public interface IAgentRepository
     {
-        //Create
+        // Create
         Task CreateAsync(Agent newAgent);
 
-        //Read
+        // Read
+        Task<IEnumerable<Agent>> GetAllActiveAsync();
         Task<Agent> GetByIdAsync(int agentId);
-        Task<IEnumerable<Agent>> GetByManagersAsync(IEnumerable<int> managers);
-       
-        //Update
 
-        //Delete
+        // Update
+        Task UpdateAsync(Agent updatedAgent, int agentId);
     }
+
 }
