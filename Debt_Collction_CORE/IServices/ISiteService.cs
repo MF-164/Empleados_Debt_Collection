@@ -11,10 +11,10 @@ namespace Debt_Collection_CORE.IServices
     public interface ISiteService
     {
         // Create
-        Task CreateAsync(SiteVM newSite);
+        Task<SiteVM> CreateAsync(SiteVM newSite);
 
         // Read
-        Task<Site> GetByIdAsync(int siteId);
+        Task<SiteVM> GetByIdAsync(int siteId);
         Task<IEnumerable<SiteVM>> GetByClientIdAsync(int clientId);
         Task<IEnumerable<SiteVM>> GetAllActiveAsync();
 

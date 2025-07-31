@@ -1,10 +1,10 @@
-﻿using Debt_Collection_DATA.IRepositories;
+﻿using Debt_Collection_DATA.Helpers;
+using Debt_Collection_DATA.IRepositories;
 using Debt_Collection_DATA.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Debt_Collection_DATA.Repositories
@@ -13,22 +13,27 @@ namespace Debt_Collection_DATA.Repositories
     {
         private readonly ApplicationDbContext _context;
 
-        // Dependency Injection
         public SiteRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task CreateAsync(Site newSite)
+        public async Task<Site> CreateAsync(Site newSite)
         {
             try
             {
-                await _context.Sites.AddAsync(newSite);
+                var entry = await _context.Sites.AddAsync(newSite);
                 await _context.SaveChangesAsync();
+
+#pragma warning disable CS8603 // Possible null reference return.
+                return await _context.Sites
+                    .Include(s => s.Client)
+                    .FirstOrDefaultAsync(s => s.Id == entry.Entity.Id);
+#pragma warning restore CS8603 // Possible null reference return.
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in CreateAsync method, Class: SiteRepository. Original error: {ex.Message}", ex);
+                throw new Exception($"Error in CreateAsync (SiteRepository): {ex.Message}", ex);
             }
         }
 
@@ -36,16 +41,18 @@ namespace Debt_Collection_DATA.Repositories
         {
             try
             {
-                var site = await _context.Sites.FindAsync(siteId);
+                var site = await _context.Sites
+                    .Include(s => s.Client)
+                    .FirstOrDefaultAsync(s => s.Id == siteId);
+
                 if (site == null)
-                {
                     throw new KeyNotFoundException("Site not found.");
-                }
+
                 return site;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in GetByIdAsync method, Class: SiteRepository. Original error: {ex.Message}", ex);
+                throw new Exception($"Error in GetByIdAsync (SiteRepository): {ex.Message}", ex);
             }
         }
 
@@ -54,13 +61,13 @@ namespace Debt_Collection_DATA.Repositories
             try
             {
                 return await _context.Sites
+                    .Include(s => s.Client)
                     .Where(s => s.ClientId == clientId && s.IsActive == true)
                     .ToListAsync();
-
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in GetByClientIdAsync method, Class: SiteRepository. Original error: {ex.Message}", ex);
+                throw new Exception($"Error in GetByClientIdAsync (SiteRepository): {ex.Message}", ex);
             }
         }
 
@@ -69,38 +76,26 @@ namespace Debt_Collection_DATA.Repositories
             try
             {
                 return await _context.Sites
-                    .Where(s => (bool)s.IsActive) // סינון אתרים פעילים
+                    .Include(s => s.Client)
+                    .Where(s => s.IsActive == true)
                     .ToListAsync();
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in GetAllActiveAsync method, Class: SiteRepository. Original error: {ex.Message}", ex);
+                throw new Exception($"Error in GetAllActiveAsync (SiteRepository): {ex.Message}", ex);
             }
         }
 
         public async Task UpdateAsync(Site updatedSite)
         {
-            try
-            {
-                var site = await _context.Sites.FindAsync(updatedSite.Id);
-                if (site == null)
-                {
-                    throw new KeyNotFoundException("Site not found.");
-                }
+            var existingSite = await _context.Sites.FindAsync(updatedSite.Id);
+            if (existingSite == null)
+                throw new KeyNotFoundException("Site not found.");
 
-                // עדכון פרטי האתר
-                site.Name = updatedSite.Name;
-                site.WorkHoursContact = updatedSite.WorkHoursContact;
-                site.Phone = updatedSite.Phone;
-                site.Email = updatedSite.Email;
-                site.IsActive = updatedSite.IsActive;
+            PatchHelper.PatchNonNullValues(updatedSite, existingSite, _context, "Id");
 
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error in UpdateAsync method, Class: SiteRepository. Original error: {ex.Message}", ex);
-            }
+            await _context.SaveChangesAsync();
         }
+
     }
 }

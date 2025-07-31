@@ -17,68 +17,49 @@ namespace Debt_Collection_CORE.Services
 
         public ClientService(IClientRepository clientRepository, IMapper mapper)
         {
-            this._clientRepository = clientRepository;
-            this._mapper = mapper;
+            _clientRepository = clientRepository;
+            _mapper = mapper;
         }
 
-        public async Task CreateAsync(ClientVM newClient)
+        public async Task<ClientVM> CreateAsync(ClientVM newClient)
         {
             try
             {
                 ValidateClient(newClient);
-                await _clientRepository.CreateAsync(ConvertToClient(newClient));
+                var createdClient = await _clientRepository.CreateAsync(ConvertToClient(newClient));
+                return ConvertToClientVM(createdClient);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in CreateAsync method, Class: ClientService, Project: Debt_Collection_CORE. Original error: {ex.Message}", ex);
+                throw new Exception($"Error in CreateAsync (ClientService): {ex.Message}", ex);
             }
         }
 
-        public async Task<Client> GetByIdAsync(int clientId)
+        public async Task<ClientVM> GetByIdAsync(int clientId)
         {
-            try
-            {
-                if (clientId <= 0)
-                {
-                    throw new ArgumentException("Invalid client ID");
-                }
-                return await _clientRepository.GetByIdAsync(clientId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error in GetByIdAsync method, Class: ClientService, Project: Debt_Collection_CORE. Original error: {ex.Message}", ex);
-            }
+            if (clientId <= 0)
+                throw new ArgumentException("Invalid client ID");
+
+            var client = await _clientRepository.GetByIdAsync(clientId);
+            if (client == null)
+                throw new KeyNotFoundException($"Client with id {clientId} not found");
+
+            return ConvertToClientVM(client);
         }
 
         public async Task<IEnumerable<ClientVM>> GetByAgentIdAsync(int agentId)
         {
-            try
-            {
-                if (agentId <= 0)
-                {
-                    throw new ArgumentException("Invalid agent ID");
-                }
+            if (agentId <= 0)
+                throw new ArgumentException("Invalid agent ID");
 
-                var clients = await _clientRepository.GetByAgentIdAsync(agentId);
-                return clients.Select(c => ConvertToClientVM(c)).ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error in GetByAgentIdAsync method, Class: ClientService, Project: Debt_Collection_CORE. Original error: {ex.Message}", ex);
-            }
+            var clients = await _clientRepository.GetByAgentIdAsync(agentId);
+            return clients.Select(ConvertToClientVM).ToList();
         }
 
         public async Task<IEnumerable<ClientVM>> GetAllActiveAsync()
         {
-            try
-            {
-                var clients = await _clientRepository.GetAllActiveAsync();
-                return clients.Select(c => ConvertToClientVM(c)).ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error in GetAllAsync method, Class: ClientService, Project: Debt_Collection_CORE. Original error: {ex.Message}", ex);
-            }
+            var clients = await _clientRepository.GetAllActiveAsync();
+            return clients.Select(ConvertToClientVM).ToList();
         }
 
         public async Task UpdateAsync(ClientVM updatedClient)
@@ -90,24 +71,17 @@ namespace Debt_Collection_CORE.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in UpdateAsync method, Class: ClientService, Project: Debt_Collection_CORE. Original error: {ex.Message}", ex);
+                throw new Exception($"Error in UpdateAsync (ClientService): {ex.Message}", ex);
             }
         }
 
         private void ValidateClient(ClientVM client)
         {
             if (client == null)
-            {
                 throw new ArgumentNullException(nameof(client));
-            }
 
-            // Implement additional validations as necessary
             if (string.IsNullOrWhiteSpace(client.Name))
-            {
                 throw new ArgumentException("Client name cannot be empty");
-            }
-
-            // Add other validations as needed
         }
 
         private Client ConvertToClient(ClientVM clientVM) => _mapper.Map<Client>(clientVM);

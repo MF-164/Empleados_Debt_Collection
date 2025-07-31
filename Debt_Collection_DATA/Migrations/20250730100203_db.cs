@@ -16,9 +16,10 @@ namespace Debt_Collection_DATA.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -31,17 +32,17 @@ namespace Debt_Collection_DATA.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InvoiceContact = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RegularEmployeeRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ProfessionalEmployeeRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaysBreaks = table.Column<bool>(type: "bit", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    PaymentForecast = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AgentRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AgentId = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InvoiceContact = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegularEmployeeRate = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ProfessionalEmployeeRate = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PaysBreaks = table.Column<bool>(type: "bit", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    PaymentForecast = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    AgentRate = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    AgentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,8 +51,7 @@ namespace Debt_Collection_DATA.Migrations
                         name: "FK_Clients_Agents_AgentId",
                         column: x => x.AgentId,
                         principalTable: "Agents",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -60,10 +60,11 @@ namespace Debt_Collection_DATA.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WorkHoursContact = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WorkHoursContact = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
                     ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

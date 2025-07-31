@@ -23,7 +23,8 @@ namespace Debt_Collection_CORE.ViewModels
         public decimal? AgentRate { get; set; }
 
 
-        public int? AgentName { get; set; }
+        public string? AgentName { get; set; }
+        public int? AgentId { get; set; }
 
         public ICollection<SiteForClientVM>? Sites { get; set; }
     }

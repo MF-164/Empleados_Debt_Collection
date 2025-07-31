@@ -11,7 +11,7 @@ namespace Debt_Collection_DATA.IRepositories
     public interface IClientRepository
     {
         // Create
-        Task CreateAsync(Client newClient);
+        Task<Client> CreateAsync(Client newClient);
 
         // Read
         Task<Client> GetByIdAsync(int clientId);

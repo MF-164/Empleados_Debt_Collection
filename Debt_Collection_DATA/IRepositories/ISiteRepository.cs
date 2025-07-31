@@ -11,7 +11,7 @@ namespace Debt_Collection_DATA.IRepositories
     public interface ISiteRepository
     {
         // Create
-        Task CreateAsync(Site newSite);
+        Task<Site> CreateAsync(Site newSite);
 
         // Read
         Task<Site> GetByIdAsync(int siteId);
