@@ -11,14 +11,14 @@ namespace Debt_Collection_DATA.IRepositories
     public interface IAgentRepository
     {
         // Create
-        Task CreateAsync(Agent newAgent);
+        Task<Agent> CreateAsync(Agent newAgent);
 
         // Read
         Task<IEnumerable<Agent>> GetAllActiveAsync();
         Task<Agent> GetByIdAsync(int agentId);
-
+        
         // Update
-        Task UpdateAsync(Agent updatedAgent, int agentId);
+        Task UpdateAsync(Agent updatedAgent);
     }
 
 }

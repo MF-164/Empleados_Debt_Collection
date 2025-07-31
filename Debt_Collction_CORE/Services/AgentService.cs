@@ -22,12 +22,13 @@ namespace Debt_Collection_CORE.Services
             this._mapper = mapper;
         }
 
-        public async Task CreateAsync(AgentVM newAgent)
+        public async Task<AgentVM> CreateAsync(AgentVM newAgent)
         {
             try
             {
                 ValidateAgent(newAgent);
-                await _agentRepository.CreateAsync(ConvertToAgent(newAgent));
+                var createdAgent = await _agentRepository.CreateAsync(ConvertToAgent(newAgent));
+                return ConvertToAgentVM(createdAgent);
             }
             catch (Exception ex)
             {
@@ -48,15 +49,16 @@ namespace Debt_Collection_CORE.Services
             }
         }
 
-        public async Task<Agent> GetByIdAsync(int agentId)
+        public async Task<AgentVM> GetByIdAsync(int agentId)
         {
             try
             {
                 if (agentId <= 0)
                 {
                     throw new ArgumentException("Invalid agent ID");
-                }
-                return await _agentRepository.GetByIdAsync(agentId);
+                } 
+                var agent = await _agentRepository.GetByIdAsync(agentId);
+                return ConvertToAgentVM(agent);
             }
             catch (Exception ex)
             {
@@ -64,12 +66,12 @@ namespace Debt_Collection_CORE.Services
             }
         }
 
-        public async Task UpdateAsync(AgentVM updatedAgent, int agentId)
+        public async Task UpdateAsync(AgentVM updatedAgent)
         {
             try
             {
                 ValidateAgent(updatedAgent);
-                await _agentRepository.UpdateAsync(ConvertToAgent(updatedAgent), agentId);
+                await _agentRepository.UpdateAsync(ConvertToAgent(updatedAgent));
             }
             catch (Exception ex)
             {

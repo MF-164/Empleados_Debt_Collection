@@ -11,13 +11,13 @@ namespace Debt_Collection_CORE.IServices
     public interface IAgentService
     {
         // Create
-        Task CreateAsync(AgentVM newAgent);
+        Task<AgentVM> CreateAsync(AgentVM newAgent);
 
         // Read
         Task<IEnumerable<AgentVM>> GetAllActiveAsync();
-        Task<Agent> GetByIdAsync(int agentId);
+        Task<AgentVM> GetByIdAsync(int agentId);
 
         // Update
-        Task UpdateAsync(AgentVM updatedAgent, int agentId);
+        Task UpdateAsync(AgentVM updatedAgent);
     }
 }

@@ -17,5 +17,6 @@ namespace Debt_Collection_CORE.ViewModels
         public bool? IsActive { get; set; }
 
         public string? ClientName { get; set; }
+        public int ClientId { get; set; }
     }
 }

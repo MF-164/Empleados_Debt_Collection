@@ -1,38 +1,45 @@
 ﻿using AutoMapper;
 using Debt_Collection_CORE.ViewModels;
 using Debt_Collection_DATA.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Debt_Collection_CORE
 {
-    internal class MappingProfile : Profile
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-            //סוכן
-            CreateMap<Agent, AgentVM>().ReverseMap();
+            // Agent <-> AgentVM
+            CreateMap<Agent, AgentVM>()
+                 .ForMember(dest => dest.Clients, opt => opt.MapFrom(src =>
+                     src.Clients != null
+                         ? src.Clients.Select(c => new ClientForAgentVM
+                         {
+                             Name = c.Name,
+                             SitesName = c.Sites != null
+                                   ? c.Sites.Select(s => new SiteForClientVM { Name = s.Name }).ToList()
+                                   : new List<SiteForClientVM>()
+                         }).ToList()
+                         : new List<ClientForAgentVM>()))
+                 .ReverseMap();
 
-            //לקוח
-            CreateMap<Client, ClientVM>().ReverseMap();
 
-            // Custom mapping for ClientForAgentVM
-            CreateMap<Client, ClientForAgentVM>()
-                .ForMember(dest => dest.SitesName,
-                    opt => opt.MapFrom(src =>
-                        src.Sites != null
-                            ? src.Sites.Select(s => new SiteForClientVM { Name = s.Name }).ToList()
-                            : new List<SiteForClientVM>()));
+            // Client <-> ClientVM (with AgentName and Sites)
+            CreateMap<Client, ClientVM>()
+                .ForMember(dest => dest.AgentName, opt => opt.MapFrom(src => src.Agent != null ? src.Agent.Name : null))
+                .ForMember(dest => dest.Sites, opt => opt.MapFrom(src =>
+                    src.Sites != null
+                        ? src.Sites.Select(s => new SiteForClientVM { Name = s.Name }).ToList()
+                        : new List<SiteForClientVM>()))
+                .ReverseMap()
+                .ForMember(dest => dest.Agent, opt => opt.Ignore());
 
-            //אתר
+            // Site <-> SiteVM (with ClientName)
             CreateMap<Site, SiteVM>()
                 .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client != null ? src.Client.Name : null))
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(dest => dest.Client, opt => opt.Ignore());
 
-            CreateMap<Site,SiteForClientVM>().ReverseMap();
         }
     }
 }

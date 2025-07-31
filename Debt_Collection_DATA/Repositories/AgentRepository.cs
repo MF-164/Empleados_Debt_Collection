@@ -1,4 +1,5 @@
-﻿using Debt_Collection_DATA.IRepositories;
+﻿using Debt_Collection_DATA.Helpers;
+using Debt_Collection_DATA.IRepositories;
 using Debt_Collection_DATA.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,38 +19,53 @@ namespace Debt_Collection_DATA.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Agent>> GetAllActiveAsync()
-        {
-            try
-            {
-                return await _context.Agents
-                    .Where(a => (bool)a.IsActive)
-                    .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error in GetAllActiveAgentsAsync method, Class: AgentRepository. Original error: {ex.Message}", ex);
-            }
-        }
-
         public async Task<Agent> GetByIdAsync(int agentId)
         {
             try
             {
-                return await _context.Agents.FindAsync(agentId);
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+                return await _context.Agents
+                    .Include(a => a.Clients)
+                        .ThenInclude(c => c.Sites)
+                    .FirstOrDefaultAsync(a => a.Id == agentId);
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+#pragma warning restore CS8603 // Possible null reference return.
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in GetAgentByIdAsync method, Class: AgentRepository. Original error: {ex.Message}", ex);
+                throw new Exception($"Error in GetAgentByIdAsync (AgentRepository): {ex.Message}", ex);
             }
         }
 
-        public async Task CreateAsync(Agent newAgent)
+        public async Task<IEnumerable<Agent>> GetAllActiveAsync()
         {
             try
             {
-                await _context.Agents.AddAsync(newAgent);
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+#pragma warning disable CS8629 // Nullable value type may be null.
+                return await _context.Agents
+                    .Include(a => a.Clients)
+                        .ThenInclude(c => c.Sites)
+                    .Where(a => (bool)a.IsActive)
+                    .ToListAsync();
+#pragma warning restore CS8629 // Nullable value type may be null.
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in GetAllActiveAgentsAsync (AgentRepository): {ex.Message}", ex);
+            }
+        }
+
+
+        public async Task<Agent> CreateAsync(Agent newAgent)
+        {
+            try
+            {
+                var entry = await _context.Agents.AddAsync(newAgent);
                 await _context.SaveChangesAsync();
+                return entry.Entity; // Return the created entity with its generated ID
             }
             catch (Exception ex)
             {
@@ -57,29 +73,15 @@ namespace Debt_Collection_DATA.Repositories
             }
         }
 
-        public async Task UpdateAsync(Agent updatedAgent, int agentId)
+        public async Task UpdateAsync(Agent updatedAgent)
         {
-            try
-            {
-                var agent = await _context.Agents.FindAsync(agentId);
-                if (agent == null)
-                {
-                    throw new KeyNotFoundException("Agent not found.");
-                }
+            var existingAgent = await _context.Agents.FindAsync(updatedAgent.Id);
+            if (existingAgent == null)
+                throw new KeyNotFoundException("Agent not found.");
 
-                // עדכון פרטי הסוכן
-                agent.Name = updatedAgent.Name;
-                agent.Phone = updatedAgent.Phone;
-                agent.Email = updatedAgent.Email;
-                agent.IsActive = updatedAgent.IsActive;
+            PatchHelper.PatchNonNullValues(updatedAgent, existingAgent, _context, "Id");
 
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error in UpdateAgentAsync method, Class: AgentRepository. Original error: {ex.Message}", ex);
-            }
+            await _context.SaveChangesAsync();
         }
     }
-
 }

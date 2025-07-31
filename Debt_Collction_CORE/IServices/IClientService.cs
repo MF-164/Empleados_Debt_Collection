@@ -11,10 +11,10 @@ namespace Debt_Collection_CORE.IServices
     public interface IClientService
     {
         // Create
-        Task CreateAsync(ClientVM newClient);
+        Task<ClientVM> CreateAsync(ClientVM newClient);
 
         // Read
-        Task<Client> GetByIdAsync(int clientId);
+        Task<ClientVM> GetByIdAsync(int clientId);
         Task<IEnumerable<ClientVM>> GetByAgentIdAsync(int agentId);
         Task<IEnumerable<ClientVM>> GetAllActiveAsync();
 

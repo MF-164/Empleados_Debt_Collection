@@ -21,12 +21,13 @@ namespace Debt_Collection_CORE.Services
             this._mapper = mapper;
         }
 
-        public async Task CreateAsync(SiteVM newSite)
+        public async Task<SiteVM> CreateAsync(SiteVM newSite)
         {
             try
             {
                 ValidateSite(newSite);
-                await _siteRepository.CreateAsync(ConvertToSite(newSite));
+                var createdSite = await _siteRepository.CreateAsync(ConvertToSite(newSite));
+                return ConvertToSiteVM(createdSite);
             }
             catch (Exception ex)
             {
@@ -34,7 +35,7 @@ namespace Debt_Collection_CORE.Services
             }
         }
 
-        public async Task<Site> GetByIdAsync(int siteId)
+        public async Task<SiteVM> GetByIdAsync(int siteId)
         {
             try
             {
@@ -42,7 +43,8 @@ namespace Debt_Collection_CORE.Services
                 {
                     throw new ArgumentException("Invalid site ID");
                 }
-                return await _siteRepository.GetByIdAsync(siteId);
+                var site = await _siteRepository.GetByIdAsync(siteId);
+                return ConvertToSiteVM(site);
             }
             catch (Exception ex)
             {
