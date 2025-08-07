@@ -5,7 +5,7 @@
 namespace Debt_Collection_DATA.Migrations
 {
     /// <inheritdoc />
-    public partial class db : Migration
+    public partial class AddDailyWorkReport : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -78,10 +78,58 @@ namespace Debt_Collection_DATA.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "MonthlyWorkReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    SiteId = table.Column<int>(type: "int", nullable: false),
+                    Month = table.Column<int>(type: "int", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    NumOfWorkers = table.Column<int>(type: "int", nullable: false),
+                    TotalRegularHours = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalExtraHours = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    EmployeeType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HourlyRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AmountBeforeVAT = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ApprovalStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InvoiceSignatureStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MonthlyWorkReports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MonthlyWorkReports_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MonthlyWorkReports_Sites_SiteId",
+                        column: x => x.SiteId,
+                        principalTable: "Sites",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_AgentId",
                 table: "Clients",
                 column: "AgentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonthlyWorkReports_ClientId_SiteId_Month_Year",
+                table: "MonthlyWorkReports",
+                columns: new[] { "ClientId", "SiteId", "Month", "Year" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonthlyWorkReports_SiteId",
+                table: "MonthlyWorkReports",
+                column: "SiteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sites_ClientId",
@@ -92,6 +140,9 @@ namespace Debt_Collection_DATA.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "MonthlyWorkReports");
+
             migrationBuilder.DropTable(
                 name: "Sites");
 
