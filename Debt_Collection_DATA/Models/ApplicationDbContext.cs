@@ -17,6 +17,9 @@ namespace Debt_Collection_DATA.Models
         public DbSet<Client> Clients { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Agent> Agents { get; set; }
+
+        public DbSet<InvoiceRecord> InvoiceRecords { get; internal set; }
+
         public DbSet<MonthlyWorkReport> MonthlyWorkReports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
