@@ -95,13 +95,18 @@ namespace Debt_Collection_DATA.Migrations
                     b.ToTable("Clients");
                 });
 
+
             modelBuilder.Entity("Debt_Collection_DATA.Models.InvoiceRecord", b =>
+
+            modelBuilder.Entity("Debt_Collection_DATA.Models.MonthlyWorkReport", b =>
+
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -131,11 +136,59 @@ namespace Debt_Collection_DATA.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+
+                    b.Property<decimal>("AmountBeforeVAT")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ApprovalStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployeeType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("HourlyRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("InvoiceSignatureStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumOfWorkers")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalExtraHours")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalRegularHours")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+
                     b.HasKey("Id");
 
                     b.HasIndex("SiteId");
 
+
                     b.ToTable("InvoiceRecords");
+
+                    b.HasIndex("ClientId", "SiteId", "Month", "Year")
+                        .IsUnique();
+
+                    b.ToTable("MonthlyWorkReports");
+
                 });
 
             modelBuilder.Entity("Debt_Collection_DATA.Models.Site", b =>
@@ -180,6 +233,7 @@ namespace Debt_Collection_DATA.Migrations
                     b.Navigation("Agent");
                 });
 
+
             modelBuilder.Entity("Debt_Collection_DATA.Models.InvoiceRecord", b =>
                 {
                     b.HasOne("Debt_Collection_DATA.Models.Site", "Site")
@@ -187,6 +241,24 @@ namespace Debt_Collection_DATA.Migrations
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+
+            modelBuilder.Entity("Debt_Collection_DATA.Models.MonthlyWorkReport", b =>
+                {
+                    b.HasOne("Debt_Collection_DATA.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Debt_Collection_DATA.Models.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
 
                     b.Navigation("Site");
                 });

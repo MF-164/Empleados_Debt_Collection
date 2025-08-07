@@ -1,5 +1,4 @@
-﻿using Debt_Collection_DATA.Helpers;
-using Debt_Collection_DATA.IRepositories;
+﻿using Debt_Collection_DATA.IRepositories;
 using Debt_Collection_DATA.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -92,7 +91,7 @@ namespace Debt_Collection_DATA.Repositories
             if (existingSite == null)
                 throw new KeyNotFoundException("Site not found.");
 
-            PatchHelper.PatchNonNullValues(updatedSite, existingSite, _context, "Id");
+            PatchHelper.CopyAllFieldsExceptId(updatedSite, existingSite);
 
             await _context.SaveChangesAsync();
         }

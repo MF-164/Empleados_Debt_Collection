@@ -1,5 +1,4 @@
-﻿using Debt_Collection_DATA.Helpers;
-using Debt_Collection_DATA.IRepositories;
+﻿using Debt_Collection_DATA.IRepositories;
 using Debt_Collection_DATA.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -79,7 +78,7 @@ namespace Debt_Collection_DATA.Repositories
             if (existingAgent == null)
                 throw new KeyNotFoundException("Agent not found.");
 
-            PatchHelper.PatchNonNullValues(updatedAgent, existingAgent, _context, "Id");
+            PatchHelper.CopyAllFieldsExceptId(updatedAgent, existingAgent);
 
             await _context.SaveChangesAsync();
         }
