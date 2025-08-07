@@ -40,6 +40,12 @@ namespace Debt_Collection_CORE
                 .ReverseMap()
                 .ForMember(dest => dest.Client, opt => opt.Ignore());
 
+            // MonthlyWorkReport <-> MonthlyWorkReportVM
+            CreateMap<MonthlyWorkReport, MonthlyWorkReportVM>()
+                .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client != null ? src.Client.Name : null))
+                .ForMember(dest => dest.SiteName, opt => opt.MapFrom(src => src.Site != null ? src.Site.Name : null));
+
+            CreateMap<MonthlyWorkReportVM, MonthlyWorkReport>(); 
         }
     }
 }

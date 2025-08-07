@@ -1,5 +1,4 @@
-﻿using Debt_Collection_DATA.Helpers;
-using Debt_Collection_DATA.IRepositories;
+﻿using Debt_Collection_DATA.IRepositories;
 using Debt_Collection_DATA.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -98,7 +97,7 @@ namespace Debt_Collection_DATA.Repositories
                 if (existingClient == null)
                     throw new KeyNotFoundException("Client not found.");
 
-                PatchHelper.PatchNonNullValues(updatedClient, existingClient, _context, "Id");
+                PatchHelper.CopyAllFieldsExceptId(updatedClient, existingClient);
 
                 await _context.SaveChangesAsync();
             }
