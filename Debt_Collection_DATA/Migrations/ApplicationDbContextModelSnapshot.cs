@@ -95,18 +95,13 @@ namespace Debt_Collection_DATA.Migrations
                     b.ToTable("Clients");
                 });
 
-
             modelBuilder.Entity("Debt_Collection_DATA.Models.InvoiceRecord", b =>
-
-            modelBuilder.Entity("Debt_Collection_DATA.Models.MonthlyWorkReport", b =>
-
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -136,6 +131,20 @@ namespace Debt_Collection_DATA.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("InvoiceRecords");
+                });
+
+            modelBuilder.Entity("Debt_Collection_DATA.Models.MonthlyWorkReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("AmountBeforeVAT")
                         .HasColumnType("decimal(18,2)");
@@ -176,19 +185,14 @@ namespace Debt_Collection_DATA.Migrations
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
-
                     b.HasKey("Id");
 
                     b.HasIndex("SiteId");
-
-
-                    b.ToTable("InvoiceRecords");
 
                     b.HasIndex("ClientId", "SiteId", "Month", "Year")
                         .IsUnique();
 
                     b.ToTable("MonthlyWorkReports");
-
                 });
 
             modelBuilder.Entity("Debt_Collection_DATA.Models.Site", b =>
@@ -233,7 +237,6 @@ namespace Debt_Collection_DATA.Migrations
                     b.Navigation("Agent");
                 });
 
-
             modelBuilder.Entity("Debt_Collection_DATA.Models.InvoiceRecord", b =>
                 {
                     b.HasOne("Debt_Collection_DATA.Models.Site", "Site")
@@ -242,6 +245,8 @@ namespace Debt_Collection_DATA.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Site");
+                });
 
             modelBuilder.Entity("Debt_Collection_DATA.Models.MonthlyWorkReport", b =>
                 {
@@ -258,7 +263,6 @@ namespace Debt_Collection_DATA.Migrations
                         .IsRequired();
 
                     b.Navigation("Client");
-
 
                     b.Navigation("Site");
                 });
