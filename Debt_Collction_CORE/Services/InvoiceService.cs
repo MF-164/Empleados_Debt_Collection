@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Debt_Collection_CORE.Services
 {
-    internal class InvoiceService
+    public class InvoiceService
     {
     }
 }

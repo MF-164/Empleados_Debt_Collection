@@ -25,6 +25,8 @@ builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IMonthlyWorkReportService, MonthlyWorkReportService>();
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+
 
 
 // Add Repositories
