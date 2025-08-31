@@ -51,7 +51,15 @@ namespace Debt_Collection_CORE
                 .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client != null ? src.Client.Name : null))
                 .ForMember(dest => dest.SiteName, opt => opt.MapFrom(src => src.Site != null ? src.Site.Name : null));
 
-            CreateMap<MonthlyWorkReportVM, MonthlyWorkReport>(); 
+            CreateMap<MonthlyWorkReportVM, MonthlyWorkReport>();
+
+            CreateMap<Invoice, InvoiceVM>()
+                .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client != null ? src.Client.Name : null))
+                .ForMember(dest => dest.SiteName, opt => opt.MapFrom(src => src.Site != null ? src.Site.Name : null));
+
+            CreateMap<InvoiceVM, Invoice>()
+                .ForMember(dest => dest.Client, opt => opt.Ignore())
+                .ForMember(dest => dest.Site, opt => opt.Ignore());
 
         }
     }
