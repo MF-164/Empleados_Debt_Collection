@@ -1,5 +1,4 @@
-﻿using Debt_Collection_DATA.Helpers;
-using Debt_Collection_DATA.IRepositories;
+﻿using Debt_Collection_DATA.IRepositories;
 using Debt_Collection_DATA.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -97,7 +96,7 @@ namespace Debt_Collection_DATA.Repositories
                 if (existing == null)
                     throw new KeyNotFoundException("Invoice not found.");
 
-                PatchHelper.PatchNonNullValues(updatedInvoice, existing, _context, "Id");
+                PatchHelper.CopyAllFieldsExceptId(updatedInvoice, existing);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)

@@ -25,12 +25,17 @@ builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IMonthlyWorkReportService, MonthlyWorkReportService>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+
+
+
 
 // Add Repositories
 builder.Services.AddScoped<IAgentRepository, AgentRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ISiteRepository, SiteRepository>();
 builder.Services.AddScoped<IMonthlyWorkReportRepository, MonthlyWorkReportRepository>();
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 
 //Add Auto-Mapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));

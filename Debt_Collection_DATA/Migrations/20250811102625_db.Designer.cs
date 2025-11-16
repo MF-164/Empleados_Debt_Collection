@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Debt_Collection_DATA.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250807111559_AddDailyWorkReport")]
-    partial class AddDailyWorkReport
+    [Migration("20250811102625_db")]
+    partial class db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,6 +96,49 @@ namespace Debt_Collection_DATA.Migrations
                     b.HasIndex("AgentId");
 
                     b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("Debt_Collection_DATA.Models.InvoiceRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("IssueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("PaidAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("InvoiceRecords");
                 });
 
             modelBuilder.Entity("Debt_Collection_DATA.Models.MonthlyWorkReport", b =>
@@ -195,6 +238,17 @@ namespace Debt_Collection_DATA.Migrations
                         .HasForeignKey("AgentId");
 
                     b.Navigation("Agent");
+                });
+
+            modelBuilder.Entity("Debt_Collection_DATA.Models.InvoiceRecord", b =>
+                {
+                    b.HasOne("Debt_Collection_DATA.Models.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("Debt_Collection_DATA.Models.MonthlyWorkReport", b =>

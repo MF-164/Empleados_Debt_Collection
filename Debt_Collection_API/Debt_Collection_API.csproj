@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Debt_Collction_CORE\Debt_Collection_CORE.csproj" />
-	  <Folder Include="Controllers\" />
   </ItemGroup>
 
   <ItemGroup>
